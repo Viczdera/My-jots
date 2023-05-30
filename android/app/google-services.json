@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "948983051475",
+    "project_id": "my-jots",
+    "storage_bucket": "my-jots.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:948983051475:android:9b1b4af1e9b503c4f69026",
+        "android_client_info": {
+          "package_name": "xyz.victordera.myjots"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "948983051475-pqfo0dpb15ljitat9fpqp1ldtu5eaol3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGeVQWvGDOkaV4Wtc7gSie81Ox9gB-FDc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "948983051475-pqfo0dpb15ljitat9fpqp1ldtu5eaol3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
