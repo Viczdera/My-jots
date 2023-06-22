@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -48,7 +49,6 @@ class _MyHomepage extends State {
 //create text editing controllers
   @override
   void initState() {
-    // TODO: implement initState
     _email = TextEditingController();
     _password = TextEditingController();
     super.initState();
@@ -66,8 +66,9 @@ class _MyHomepage extends State {
   Widget build(BuildContext context) {
     return Scaffold(
         // appBar: AppBar(title: Text(this.title)),
-        appBar: AppBar(title: Text('Regiter')),
+        appBar: AppBar(title: Text('Register')),
         body: FutureBuilder(
+          //perform the initialization before building the widget
           future: Firebase.initializeApp(
               options: DefaultFirebaseOptions.currentPlatform),
           builder: (context, snapshot) {
@@ -76,6 +77,8 @@ class _MyHomepage extends State {
                 return Column(children: [
                   TextField(
                     controller: _email,
+                    enableSuggestions: false,
+                    autocorrect: false,
                     decoration:
                         const InputDecoration(hintText: "Enter your email"),
                   ),
