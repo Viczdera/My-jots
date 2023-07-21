@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:myjots/firebase_options.dart';
 import 'package:myjots/views/login_view.dart';
-import 'firebase_options.dart';
+import 'package:myjots/views/register_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,108 +17,60 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: LoginView(),
-    );
-  }
-}
-
-class RegisterView extends StatefulWidget {
-  const RegisterView({Key? key}) : super(key: key);
-
-  @override
-  State<RegisterView> createState() => _RegisterViewState();
-}
-
-class _RegisterViewState extends State<RegisterView> {
-  //text editing controller
-  late final TextEditingController _email;
-  late final TextEditingController _password;
-
-//create text editing controllers
-  @override
-  void initState() {
-    _email = TextEditingController();
-    _password = TextEditingController();
-    super.initState();
-  }
-
-  //dispose controllers
-  @override
-  void dispose() {
-    _email.dispose();
-    _password.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        // appBar: AppBar(title: Text(this.title)),
-        appBar: AppBar(title: Text('Register')),
-        body: FutureBuilder(
-          //perform the initialization before building the widget
-          future: Firebase.initializeApp(
-              options: DefaultFirebaseOptions.currentPlatform),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.done:
-                return Column(children: [
-                  TextField(
-                    controller: _email,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    decoration:
-                        const InputDecoration(hintText: "Enter your email"),
-                  ),
-                  TextField(
-                    controller: _password,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                        hintText: "Enter desired password"),
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      final email = _email.text;
-                      final password = _password.text;
-                      try {
-                        final userCred = await FirebaseAuth.instance
-                            .createUserWithEmailAndPassword(
-                                email: email, password: password);
-                        print(userCred);
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code == 'email-already-in-use') {
-                          print('Email already in use');
-                        } else if (e.code == 'weak-password') {
-                          print('Weak pass biatch');
-                        } else if (e.code == 'network-request-failed') {
-                          print("Network error");
-                        }
-                        print(e.code);
-                      } catch (e) {
-                        print(e.runtimeType);
-                        print(e);
-                      }
-                    },
-                    child: Text('Register'),
-                  ),
-                ]);
-              default:
-                return const Text('loading...');
-            }
-          },
+        title: 'Flutter Demo',
+        theme: CustomTheme.lightTheme,
+        darkTheme: CustomTheme.darkTheme,
+        themeMode: ThemeMode.system,
+        // home: LoginView(),
+        home: Scaffold(
+          //   appBar: AppBar(title: const Text('HOme')),
+          body: FutureBuilder(
+              future: Firebase.initializeApp(
+                  options: DefaultFirebaseOptions.currentPlatform),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.done:
+                    print(FirebaseAuth.instance.currentUser);
+                    return SafeArea(
+                        child: Container(
+                            width: double.infinity,
+                            child: Card(
+                              color: Theme.of(context).cardTheme.color,
+                              child: SizedBox(
+                                height: 200,
+                                child: const Text('Card'),
+                              ),
+                            )));
+                  default:
+                    return const Text('loading....');
+                }
+              }),
         ));
   }
+}
+
+class CustomTheme {
+  static ThemeData darkTheme = ThemeData.dark().copyWith(
+    // Dark mode theme
+    scaffoldBackgroundColor: const Color(0xff131718),
+    colorScheme: ColorScheme.fromSwatch().copyWith(
+      secondary: const Color(0xFFCC4F4F),
+    ),
+    cardTheme: CardTheme(color: darkFolderCard.primary),
+    // Add any other theme customization properties here
+  );
+  static ThemeData lightTheme = ThemeData.light().copyWith(
+    // Light mode theme
+    scaffoldBackgroundColor: const Color(0xFFFFFFFF),
+    colorScheme: ColorScheme.fromSwatch()
+        .copyWith(secondary: const Color(0xFFCC4F4F)), // red color
+    // Add any other theme customization properties here
+    cardTheme: CardTheme(color: lightFolderCard.primary),
+  );
+  static ColorScheme lightFolderCard = ColorScheme.light().copyWith(
+    primary: const Color(0xfff0f2f2), // Light mode card color
+  );
+  static ColorScheme darkFolderCard = ColorScheme.dark().copyWith(
+    primary: const Color(0xFF1B1E1E),
+  );
 }
